@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ['...', 'openssl']
+
+[phases.build]
+cmds = ['dotnet publish -c Release -o /app/publish']
+
+[start]
+cmd = 'cd /app/publish && dotnet app-test-api.dll'
