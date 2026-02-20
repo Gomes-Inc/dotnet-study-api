@@ -1,0 +1,17 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dotnet-study-api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DatabaseProvider=PostgreSQL
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+

@@ -1,5 +1,6 @@
 using app_test_api.Models;
-using app_test_api.Services;
+using app_test_api.Models.Request;
+using app_test_api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app_test_api.Controllers;

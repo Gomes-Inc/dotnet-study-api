@@ -1,5 +1,6 @@
 using app_test_api.Data;
 using app_test_api.Models;
+using app_test_api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace app_test_api.Services;

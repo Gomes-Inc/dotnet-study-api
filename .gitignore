@@ -49,6 +49,7 @@ bld/
 *.db
 *.db-shm
 *.db-wal
+database/
 
 # SQL Server data
 sqlserver-data/

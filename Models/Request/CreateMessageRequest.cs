@@ -1,4 +1,4 @@
-namespace app_test_api.Models;
+namespace app_test_api.Models.Request;
 
 public class CreateMessageRequest
 {

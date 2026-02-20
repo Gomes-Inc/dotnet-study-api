@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Message> Messages { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -19,6 +20,13 @@ public class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.MessageContent).IsRequired().HasMaxLength(1000);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
     }
