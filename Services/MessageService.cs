@@ -1,7 +1,9 @@
 using app_test_api.Data;
 using app_test_api.Models;
+using app_test_api.Models.Request;
 using app_test_api.Models.Response;
 using app_test_api.Services.Interfaces;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace app_test_api.Services;
@@ -60,7 +62,7 @@ public class MessageService : IMessageService
             .FirstOrDefaultAsync();
     }
 
-    public async Task<MessageResponse> CreateAsync(Message message)
+    public async Task<MessageResponse> CreateAsync(CreateMessageRequest message)
     {
         var recipientExists = await _context.Users
             .AnyAsync(u => u.Id == message.RecipientId);
@@ -73,7 +75,15 @@ public class MessageService : IMessageService
         message.MessageContent = message.MessageContent.Trim();
         message.Sender = message.Sender.Trim();
 
-        _context.Messages.Add(message);
+        var messageEntity = new Message
+        {
+            MessageContent = message.MessageContent,
+            Sender = message.Sender,
+            RecipientId = message.RecipientId,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.Messages.Add(messageEntity);
         await _context.SaveChangesAsync();
 
         var user = await _context.Users
@@ -88,10 +98,10 @@ public class MessageService : IMessageService
 
         return new MessageResponse
         {
-            Id = message.Id,
-            MessageContent = message.MessageContent,
-            Sender = message.Sender,
-            CreatedAt = message.CreatedAt,
+            Id = messageEntity.Id,
+            MessageContent = messageEntity.MessageContent,
+            Sender = messageEntity.Sender,
+            CreatedAt = messageEntity.CreatedAt,
             User = user ?? new UserResponse()
         };
     }

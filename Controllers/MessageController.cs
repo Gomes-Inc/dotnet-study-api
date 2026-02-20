@@ -1,4 +1,3 @@
-using app_test_api.Models;
 using app_test_api.Models.Request;
 using app_test_api.Models.Response;
 using app_test_api.Services.Interfaces;
@@ -59,17 +58,9 @@ public class MessageController : ControllerBase
             return BadRequest(new { message = "Valid recipient ID is required" });
         }
 
-        var message = new Message
-        {
-            MessageContent = request.MessageContent,
-            Sender = request.Sender,
-            RecipientId = request.RecipientId,
-            CreatedAt = DateTime.UtcNow
-        };
-
         try
         {
-            var createdMessage = await _messageService.CreateAsync(message);
+            var createdMessage = await _messageService.CreateAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = createdMessage.Id }, createdMessage);
         }
         catch (InvalidOperationException ex)
