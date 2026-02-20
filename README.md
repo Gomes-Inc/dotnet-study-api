@@ -52,7 +52,20 @@ git clone <repository-url>
 cd app-test-api
 ```
 
-2. **Configure Database Connection**
+2. **Create environment file**
+
+Rename `.env.example` to `.env`:
+```bash
+# Windows (PowerShell)
+Rename-Item .env.example .env
+
+# Linux/Mac
+mv .env.example .env
+```
+
+The `.env` file is pre-configured with development credentials for docker-compose. No editing needed!
+
+3. **Configure Database Connection**
 
 **Option A: Using Docker Compose (recommended)**
 
@@ -164,12 +177,25 @@ The docker-compose includes:
 - Password: `postgres123`
 - Database: `dotnet_study_db`
 
-**Optional:** Create a `.env` file in the root directory to override environment variables:
+**Environment Variables:**
+
+The project includes a `.env.example` file with ready-to-use development credentials. Just rename it to `.env`:
+```bash
+# Windows (PowerShell)
+Rename-Item .env.example .env
+
+# Linux/Mac
+mv .env.example .env
+```
+
+Default configuration (already in `.env.example`):
 ```env
-DATABASE_URL=Host=postgres;Port=5432;Database=dotnet_study_db;Username=postgres;Password=postgres123;
 ASPNETCORE_ENVIRONMENT=Development
 DatabaseProvider=PostgreSQL
+DATABASE_URL=Host=postgres;Port=5432;Database=dotnet_study_db;Username=postgres;Password=postgres123;
 ```
+
+No editing needed - it works out of the box with docker-compose!
 
 > **Note**: This docker-compose setup is for **local development only**. For production deployments, use hosting services like Railway, Render, or Heroku. See the [Production Deployment](#production-deployment) section below.
 
