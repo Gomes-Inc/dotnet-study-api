@@ -1,5 +1,7 @@
 using app_test_api.Models;
-using app_test_api.Services;
+using app_test_api.Models.DTOs;
+using app_test_api.Models.Request;
+using app_test_api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app_test_api.Controllers;
@@ -16,7 +18,7 @@ public class MessageController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Message>>> GetAll()
+    public async Task<ActionResult<List<MessageDto>>> GetAll()
     {
         var messages = await _messageService.GetAllAsync();
         return Ok(messages);
@@ -47,7 +49,7 @@ public class MessageController : ControllerBase
         {
             MessageContent = request.MessageContent,
             Sender = request.Sender,
-            Recipient = request.Recipient,
+            RecipientId = request.RecipientId,
             CreatedAt = DateTime.UtcNow
         };
 

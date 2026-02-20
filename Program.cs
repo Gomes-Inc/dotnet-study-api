@@ -1,5 +1,6 @@
 using app_test_api.Data;
 using app_test_api.Services;
+using app_test_api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,9 @@ if (string.IsNullOrWhiteSpace(connectionString))
     connectionString = null;
 }
 
-var databaseProvider = builder.Configuration.GetValue<string>("DatabaseProvider") ?? "SqlServer";
+var databaseProvider = Environment.GetEnvironmentVariable("DatabaseProvider") 
+    ?? builder.Configuration.GetValue<string>("DatabaseProvider") 
+    ?? "PostgreSQL";
 
 if (string.IsNullOrEmpty(connectionString))
 {
@@ -39,6 +42,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IUsersService, UserService>();
 
 builder.Services.AddCors(options =>
 {

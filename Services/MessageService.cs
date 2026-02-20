@@ -1,5 +1,7 @@
 using app_test_api.Data;
 using app_test_api.Models;
+using app_test_api.Models.DTOs;
+using app_test_api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace app_test_api.Services;
@@ -13,10 +15,24 @@ public class MessageService : IMessageService
         _context = context;
     }
 
-    public async Task<List<Message>> GetAllAsync()
+    public async Task<List<MessageDto>> GetAllAsync()
     {
         return await _context.Messages
+            .AsNoTracking()
             .OrderByDescending(m => m.CreatedAt)
+            .Select(m => new MessageDto
+            {
+                Id = m.Id,
+                MessageContent = m.MessageContent,
+                Sender = m.Sender,
+                CreatedAt = m.CreatedAt,
+
+                User = new UserDto
+                {
+                    Id = m.User.Id,
+                    Name = m.User.Name
+                }
+            })
             .ToListAsync();
     }
 
