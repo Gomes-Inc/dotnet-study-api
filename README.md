@@ -52,26 +52,33 @@ git clone <repository-url>
 cd app-test-api
 ```
 
-2. **Configure environment variables**
+2. **Start PostgreSQL (choose one option)**
 
-Copy `.env.example` to `.env` and configure your database:
+**Option A: Using Docker (recommended)**
 ```bash
-cp .env.example .env
+docker-compose up postgres -d
 ```
 
-Edit `.env`:
-```bash
-DATABASE_URL=Host=localhost;Port=5432;Database=your_db;Username=your_user;Password=your_password;Pooling=true;
-DatabaseProvider=PostgreSQL
-```
+**Option B: Using existing PostgreSQL**
+- Make sure your PostgreSQL is running on `localhost:5432`
 
-3. **Restore and run**
+3. **Run the API**
+
+**Using Visual Studio:**
+- Open the solution and press `F5`
+- Use the "http" or "https" profile
+
+**Using command line:**
 ```bash
 dotnet restore
 dotnet run
 ```
 
-API runs at `http://localhost:5000/` (HTTP) and `https://localhost:5001/` (HTTPS)
+API runs at:
+- **HTTP:** http://localhost:5095
+- **HTTPS:** https://localhost:7069
+
+**Note:** The Visual Studio launch profiles are pre-configured with local PostgreSQL connection. If you need different settings, create a `.env` file or modify `Properties/launchSettings.json`.
 
 ### Database Migrations
 
@@ -87,23 +94,33 @@ dotnet ef database update
 
 ## Docker
 
-### Running with Docker
+> **Note**: This docker-compose setup is for **local development only**. For production deployments, use hosting services like Railway, Render, or Heroku. See the [Production Deployment](#production-deployment) section below.
+
+### Quick Start with Docker
+
+Run the API with PostgreSQL database included:
 
 ```bash
-# Build and run
 docker-compose up -d --build
 ```
 
-API will be available at:
-- **HTTP:** http://localhost:5000
-- **HTTPS:** https://localhost:5001
+This will start:
+- PostgreSQL database on port `5432`
+- API on ports `5000` (HTTP) and `5001` (HTTPS)
 
-**Important**: Configure `DATABASE_URL` environment variable in `.env` file or in docker-compose.yml
+Access the API:
+- **Swagger UI:** http://localhost:5000
 
 ### Stop
 
 ```bash
 docker-compose down
+```
+
+### Stop and Remove Data
+
+```bash
+docker-compose down -v
 ```
 
 ## Production Deployment

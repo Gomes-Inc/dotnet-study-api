@@ -1,17 +1,50 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dotnet-study-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: dotnet_study_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
   api:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: dotnet-study-api
     restart: always
+    env_file:
+      - .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - DatabaseProvider=PostgreSQL
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=Host=postgres;Port=5432;Database=dotnet_study_db;Username=postgres;Password=postgres123;Pooling=true;
     ports:
       - "5000:8080"
       - "5001:8081"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
 
