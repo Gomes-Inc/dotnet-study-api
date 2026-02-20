@@ -15,5 +15,7 @@ namespace app_test_api.Models
         public string Name { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }
